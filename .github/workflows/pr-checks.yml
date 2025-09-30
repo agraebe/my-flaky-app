@@ -35,6 +35,14 @@ jobs:
         npm test
         echo "✅ All tests passed!"
         
+    - name: Upload XML test reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: jasmine-xml-reports
+        path: test-reports/*.xml
+        retention-days: 7
+        
     - name: Comment PR with test results
       if: always()
       uses: actions/github-script@v7

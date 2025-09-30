@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jasmine",
-    "test:watch": "jasmine --watch"
+    "test:watch": "jasmine --watch",
+    "test:reports": "node scripts/test-with-reports.js"
   },
   "dependencies": {
     "next": "15.5.4",
@@ -25,6 +26,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "jasmine": "^5.11.0",
+    "jasmine-reporters": "^2.5.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
