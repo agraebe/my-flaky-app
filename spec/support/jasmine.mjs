@@ -7,7 +7,7 @@ var junitReporter = new jasmineReporters.JUnitXmlReporter({
 });
 jasmine.getEnv().addReporter(junitReporter);
 
-export default {
+const jasmineConfig = {
   spec_dir: "spec",
   spec_files: [
     "**/*[sS]pec.?(m)js"
@@ -20,4 +20,6 @@ export default {
     random: true,
     forbidDuplicateNames: true
   }
-}
+};
+
+export default jasmineConfig;

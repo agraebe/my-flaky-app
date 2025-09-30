@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "jasmine",
     "test:watch": "jasmine --watch",
-    "test:reports": "node scripts/test-with-reports.js"
+    "test:reports": "node scripts/test-with-reports.mjs"
   },
   "dependencies": {
     "next": "15.5.4",
