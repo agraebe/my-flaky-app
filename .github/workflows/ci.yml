@@ -42,6 +42,18 @@ jobs:
         name: jasmine-xml-reports-node-${{ matrix.node-version }}
         path: test-reports/*.xml
         retention-days: 7
+        
+    - name: Upload results to Trunk
+      # Run this step even if the test step ahead fails
+      if: "!cancelled()"
+      uses: trunk-io/analytics-uploader@main
+      with:
+        junit-paths: "test-reports/*.xml"
+        # Provide your Trunk organization slug.
+        org-slug: alex-test
+        # Provide your Trunk API token as a GitHub secret.
+        token: ${{ secrets.TRUNK_API_TOKEN }}
+      continue-on-error: true
       
     - name: Build project
       run: npm run build

@@ -48,9 +48,26 @@ npm run test:reports
 
 ### GitHub Actions
 All workflows automatically generate and upload XML reports:
-- **PR Checks**: Uploads `jasmine-xml-reports` artifact
-- **Test Suite**: Uploads `test-results-node-{version}` artifacts
-- **CI Pipeline**: Uploads `jasmine-xml-reports-node-{version}` artifacts
+- **PR Checks**: Uploads `jasmine-xml-reports` artifact + Trunk upload
+- **Test Suite**: Uploads `test-results-node-{version}` artifacts + Trunk upload
+- **CI Pipeline**: Uploads `jasmine-xml-reports-node-{version}` artifacts + Trunk upload
+
+### Trunk Upload Configuration
+All workflows include automatic upload to Trunk using the `trunk-io/analytics-uploader` action:
+
+```yaml
+- name: Upload results to Trunk
+  # Run this step even if the test step ahead fails
+  if: "!cancelled()"
+  uses: trunk-io/analytics-uploader@main
+  with:
+    junit-paths: "test-reports/*.xml"
+    # Provide your Trunk organization slug.
+    org-slug: alex-test
+    # Provide your Trunk API token as a GitHub secret.
+    token: ${{ secrets.TRUNK_API_TOKEN }}
+  continue-on-error: true
+```
 
 ## Trunk Integration
 
@@ -118,12 +135,32 @@ test-reports/*.xml
 2. Verify artifact names match expected patterns
 3. Ensure `test-reports/` directory is included in upload paths
 
+## GitHub Secrets Configuration
+
+Before the workflows can upload to Trunk, you need to configure the GitHub secret:
+
+1. **Get Trunk API Token**: 
+   - Go to your Trunk dashboard
+   - Navigate to Settings → API Tokens
+   - Generate a new token for CI/CD
+
+2. **Add GitHub Secret**:
+   - Go to your GitHub repository
+   - Navigate to Settings → Secrets and variables → Actions
+   - Add a new repository secret named `TRUNK_API_TOKEN`
+   - Paste your Trunk API token as the value
+
+3. **Update Organization Slug** (if needed):
+   - The workflows use `org-slug: alex-test`
+   - Update this in all workflow files if your organization slug is different
+
 ## Next Steps
 
-1. **Configure Trunk**: Add the glob pattern `test-reports/*.xml` to your Trunk configuration
-2. **Run Baseline**: Execute tests multiple times to establish baseline metrics
-3. **Monitor Results**: Review Trunk dashboard for flaky test detection
-4. **Quarantine Flaky Tests**: Use Trunk's quarantining feature for identified flaky tests
+1. **Configure GitHub Secret**: Add `TRUNK_API_TOKEN` to your repository secrets
+2. **Verify Organization Slug**: Update `org-slug` in workflows if needed
+3. **Run Baseline**: Execute tests multiple times to establish baseline metrics
+4. **Monitor Results**: Review Trunk dashboard for flaky test detection
+5. **Quarantine Flaky Tests**: Use Trunk's quarantining feature for identified flaky tests
 
 ## Support
 
